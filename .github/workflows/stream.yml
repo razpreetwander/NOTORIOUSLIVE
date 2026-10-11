@@ -20,8 +20,14 @@ jobs:
       env:
         YOUTUBE_STREAM_KEY: ${{ secrets.YT_STREAM_KEY }}
       run: |
+        # Check karein ki video file mojood hai ya nahi
+        if [ ! -f "inputs/video.mp4" ]; then
+          echo "Error: inputs/video.mp4 file nahi mili!"
+          exit 1
+        fi
+
+        # YouTube par live streaming start karna
         ffmpeg -re -stream_loop -1 -i inputs/video.mp4 \
           -c:v libx264 -preset veryfast -b:v 2500k -maxrate 2500k -bufsize 5000k \
           -pix_fmt yuv420p -g 50 -c:a aac -b:a 128k -ar 44100 \
           -f flv rtmp://a.rtmp.youtube.com/live2/$YOUTUBE_STREAM_KEY
-

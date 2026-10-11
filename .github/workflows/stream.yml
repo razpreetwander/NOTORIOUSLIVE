@@ -16,16 +16,14 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y ffmpeg
 
-    - name: Download Video from Google Drive (Bypass Warning)
+    - name: Download Video from GitHub Release
       run: |
         mkdir -p inputs
-        FILE_ID="18thJl3Gm6nGznETQEWq2sI5qT23qK3Hr"
+        # Aapka GitHub Release wala direct link
+        VIDEO_URL="https://github.com/razpreetwander/NOTORIOUSLIVE/releases/download/Video.mp4/video.mp4"
         
-        echo "Downloading large file from Google Drive..."
-        # Yeh command Google Drive ki large file warning ko bypass karke seedha download karegi
-        URL="https://docs.google.com/uc?export=download&confirm=t&id=$FILE_ID"
-        wget --save-cookies cookies.txt "https://docs.google.com/uc?export=download&id=$FILE_ID" -O- ~-| sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1/p' > confirm.txt
-        wget --load-cookies cookies.txt "https://docs.google.com/uc?export=download&confirm=$(cat confirm.txt)&id=$FILE_ID" -O inputs/video.mp4
+        echo "Downloading video from GitHub Release..."
+        curl -L -o inputs/video.mp4 "$VIDEO_URL"
         
         # Check karein ki file sahi download hui ya nahi
         ls -lh inputs/video.mp4

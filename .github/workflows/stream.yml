@@ -16,12 +16,19 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y ffmpeg
 
-    - name: Download Video from Google Drive
+    - name: Download Video from Google Drive (Bypass Warning)
       run: |
         mkdir -p inputs
-        VIDEO_URL="https://drive.google.com/uc?export=download&id=18thJl3Gm6nGznETQEWq2sI5qT23qK3Hr"
-        echo "Downloading video from Google Drive..."
-        curl -L -o inputs/video.mp4 "$VIDEO_URL"
+        FILE_ID="18thJl3Gm6nGznETQEWq2sI5qT23qK3Hr"
+        
+        echo "Downloading large file from Google Drive..."
+        # Yeh command Google Drive ki large file warning ko bypass karke seedha download karegi
+        URL="https://docs.google.com/uc?export=download&confirm=t&id=$FILE_ID"
+        wget --save-cookies cookies.txt "https://docs.google.com/uc?export=download&id=$FILE_ID" -O- ~-| sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1/p' > confirm.txt
+        wget --load-cookies cookies.txt "https://docs.google.com/uc?export=download&confirm=$(cat confirm.txt)&id=$FILE_ID" -O inputs/video.mp4
+        
+        # Check karein ki file sahi download hui ya nahi
+        ls -lh inputs/video.mp4
 
     - name: Start Streaming to YouTube
       env:
@@ -31,4 +38,3 @@ jobs:
           -c:v libx264 -preset veryfast -b:v 2500k -maxrate 2500k -bufsize 5000k \
           -pix_fmt yuv420p -g 50 -c:a aac -b:a 128k -ar 44100 \
           -f flv rtmp://a.rtmp.youtube.com/live2/$YOUTUBE_STREAM_KEY
-

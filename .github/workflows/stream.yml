@@ -16,23 +16,18 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y ffmpeg
 
-    - name: Download Video from GitHub Release
+    - name: Download Video from Private GitHub Release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         mkdir -p inputs
-        # -L flag lagakar direct download link fetch karenge
-        VIDEO_URL="https://github.com/razpreetwander/NOTORIOUSLIVE/releases/download/Video.mp4/video.mp4"
         
-        echo "Downloading video from GitHub Release..."
-        curl -L -o inputs/video.mp4 "$VIDEO_URL"
+        echo "Downloading video using GitHub CLI..."
+        # Yeh private repo se direct 120MB wali video kheench lega
+        gh release download Video.mp4 -R razpreetwander/NOTORIOUSLIVE -p "video.mp4" --dir inputs
         
-        # Check karein file ka size
-        FILESIZE=$(stat -c%s "inputs/video.mp4")
-        echo "Downloaded file size: $FILESIZE bytes"
-        
-        if [ "$FILESIZE" -lt 1000000 ]; then
-          echo "Error: File bahut choti download hui hai, shayad link galat hai!"
-          exit 1
-        fi
+        # Check size
+        ls -lh inputs/video.mp4
 
     - name: Start Streaming to YouTube
       env:

@@ -1,4 +1,4 @@
-name: YouTube Auto Stream
+Name: YouTube Auto Stream
 
 on:
   workflow_dispatch:
@@ -22,9 +22,9 @@ jobs:
       run: |
         mkdir -p inputs
         
-        echo "Downloading video using GitHub CLI..."
-        # Yeh private repo se direct 120MB wali video kheench lega
-        gh release download Video.mp4 -R razpreetwander/NOTORIOUSLIVE -p "video.mp4" --dir inputs
+        echo "Downloading new video using GitHub CLI..."
+        # Yahan apne release ka tag (jaise 'video.mp4' ya jo bhi hai) aur file ka naam daal diya hai
+        gh release download video.mp4 -R razpreetwander/NOTORIOUSLIVE -p "video.mp4" --dir inputs
         
         # Check size
         ls -lh inputs/video.mp4

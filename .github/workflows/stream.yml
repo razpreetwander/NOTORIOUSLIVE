@@ -1,4 +1,4 @@
-Name: YouTube Auto Stream
+name: YouTube Auto Stream
 
 on:
   workflow_dispatch:

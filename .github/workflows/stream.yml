@@ -19,14 +19,20 @@ jobs:
     - name: Download Video from GitHub Release
       run: |
         mkdir -p inputs
-        # Aapka GitHub Release wala direct link
+        # -L flag lagakar direct download link fetch karenge
         VIDEO_URL="https://github.com/razpreetwander/NOTORIOUSLIVE/releases/download/Video.mp4/video.mp4"
         
         echo "Downloading video from GitHub Release..."
         curl -L -o inputs/video.mp4 "$VIDEO_URL"
         
-        # Check karein ki file sahi download hui ya nahi
-        ls -lh inputs/video.mp4
+        # Check karein file ka size
+        FILESIZE=$(stat -c%s "inputs/video.mp4")
+        echo "Downloaded file size: $FILESIZE bytes"
+        
+        if [ "$FILESIZE" -lt 1000000 ]; then
+          echo "Error: File bahut choti download hui hai, shayad link galat hai!"
+          exit 1
+        fi
 
     - name: Start Streaming to YouTube
       env:

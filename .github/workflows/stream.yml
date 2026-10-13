@@ -23,8 +23,8 @@ jobs:
         mkdir -p inputs
         
         echo "Downloading new video using GitHub CLI..."
-        # Yahan apne release ka tag (jaise 'video.mp4' ya jo bhi hai) aur file ka naam daal diya hai
-        gh release download video.mp4 -R razpreetwander/NOTORIOUSLIVE -p "video.mp4" --dir inputs
+        # Naya release tag 'video3.mp4' set kiya gaya hai
+        gh release download video3.mp4 -R razpreetwander/NOTORIOUSLIVE -p "video.mp4" --dir inputs
         
         # Check size
         ls -lh inputs/video.mp4
@@ -37,3 +37,4 @@ jobs:
           -c:v libx264 -preset veryfast -b:v 2500k -maxrate 2500k -bufsize 5000k \
           -pix_fmt yuv420p -g 50 -c:a aac -b:a 128k -ar 44100 \
           -f flv rtmp://a.rtmp.youtube.com/live2/$YOUTUBE_STREAM_KEY
+

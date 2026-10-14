@@ -23,7 +23,7 @@ jobs:
         mkdir -p inputs
         
         echo "Downloading new video using GitHub CLI..."
-        # Naya release tag 'video3.mp4' set kiya gaya hai
+        # Naya release tag 'video3.mp4' jo tune set kiya hai
         gh release download video3.mp4 -R razpreetwander/NOTORIOUSLIVE -p "video.mp4" --dir inputs
         
         # Check size
@@ -34,7 +34,7 @@ jobs:
         YOUTUBE_STREAM_KEY: ${{ secrets.YT_STREAM_KEY }}
       run: |
         ffmpeg -re -stream_loop -1 -i inputs/video.mp4 \
-          -c:v libx264 -preset veryfast -b:v 2500k -maxrate 2500k -bufsize 5000k \
-          -pix_fmt yuv420p -g 50 -c:a aac -b:a 128k -ar 44100 \
+          -c:v libx264 -preset veryfast -b:v 2000k -maxrate 2000k -bufsize 4000k \
+          -pix_fmt yuv420p -g 60 -keyint_min 60 \
+          -c:a aac -b:a 128k -ar 44100 \
           -f flv rtmp://a.rtmp.youtube.com/live2/$YOUTUBE_STREAM_KEY
-
